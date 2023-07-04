@@ -1,39 +1,48 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { mongooseConnect } from '@/lib/mongoose';
-import { Product } from '@/models/Product';
-import { ProductType } from '@/types/Products';
-import type { NextApiRequest, NextApiResponse } from 'next';
+
+import { NextApiRequest, NextApiResponse } from "next";
+
+import { Product } from "@/models/Product";
+import { ProductType } from "@/types/Products";
+import { mongooseConnect } from "@/lib/mongoose";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ProductType[]>
+  res: NextApiResponse<ProductType[] | boolean>
 ) {
   const { method } = req;
   await mongooseConnect();
 
-  if (method === 'POST') {
-    const { name, description, price } = req.body;
-    const productDoc = await Product.create({ name, description, price });
-    return res.json(productDoc);
+  if (method === "GET") {
+    if (req.query?.id) {
+      const product = await Product.findById(req.query.id);
+      res.json(product);
+    } else {
+      const allProducts = await Product.find();
+      res.json(allProducts);
+    }
   }
 
-  if (method === 'PUT') {
+  if (method === "POST") {
+    const { name, description, price } = req.body;
+    const productDoc = await Product.create({ name, description, price });
+    res.json(productDoc);
+  }
+
+  if (method === "PUT") {
     const { productId, name, description, price } = req.body;
-    const productDoc = await Product.findByIdAndUpdate(productId, {
+    await Product.findByIdAndUpdate(productId, {
       name,
       description,
       price,
     });
-    return res.json(productDoc);
+    res.json(true);
   }
 
-  if (method === 'GET') {
-    if (req.query?.id) {
-      const product = await Product.findById(req.query.id);
-      return res.json(product);
+  if (method === "DELETE") {
+    if (req.query.id) {
+      await Product.findByIdAndDelete(req.query.id);
+      res.json(true);
     }
-
-    const allProducts = await Product.find();
-    return res.json(allProducts);
   }
 }
