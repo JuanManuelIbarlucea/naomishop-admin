@@ -3,4 +3,5 @@ export interface ProductType {
   name: string;
   price: number;
   description?: string | undefined;
+  images: string[];
 }
