@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { ItemInterface, ReactSortable } from "react-sortablejs";
 
-import Image from "next/image";
 import LazyImage from "./LazyImage";
 import { ProductType } from "@/types/Products";
 import Spinner from "./Spinner";
@@ -25,7 +25,7 @@ export default function ProductForm({ product }: ProductFormProps) {
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
   const [returnToProducts, setReturnToProducts] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const [imageIsUploading, setImageIsUploading] = useState(false);
   const router = useRouter();
 
   async function saveProduct(ev: FormEvent) {
@@ -42,7 +42,7 @@ export default function ProductForm({ product }: ProductFormProps) {
 
   async function uploadImages(ev: ChangeEvent<HTMLInputElement>) {
     const files = ev?.target?.files;
-    setIsUploading(true);
+    setImageIsUploading(true);
     if (files?.length && files.length > 0) {
       const data = new FormData();
       for (let i = 0; i < files.length; i++) {
@@ -54,9 +54,17 @@ export default function ProductForm({ product }: ProductFormProps) {
       setImages((oldImages) => {
         return [...oldImages, ...links];
       });
-      setIsUploading(false);
+      setImageIsUploading(false);
     }
   }
+
+  function updateImagesOrder(iterableImages: ItemInterface[]) {
+    setImages(iterableImages.map((iterable) => iterable.link));
+  }
+
+  const imagesIterable = images?.map((image, i) => {
+    return { link: image, id: i };
+  });
 
   if (returnToProducts) {
     router.push("/products");
@@ -84,21 +92,27 @@ export default function ProductForm({ product }: ProductFormProps) {
         placeholder="Price"
         onChange={(ev) => setPrice(ev.target.value)}
       />
-      <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-3">
-        {!!images.length &&
-          images.map((link) => {
+        <ReactSortable
+          setList={updateImagesOrder}
+          list={imagesIterable}
+          className="flex flex-wrap gap-3"
+        >
+          {images.map((link) => {
             return (
               <div key={link} className="h-24">
                 <LazyImage src={link} alt="" className="rounded-lg" />
               </div>
             );
           })}
-        {isUploading && (
+        </ReactSortable>
+
+        {imageIsUploading && (
           <div className="h-24 flex items-center">
             <Spinner />
           </div>
         )}
+
         <label className="w-24 h-24 border flex justify-center items-center text-sm gap-1 text-center text-gray-500 bg-gray-200 rounded-lg cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -117,8 +131,9 @@ export default function ProductForm({ product }: ProductFormProps) {
           <div>Upload</div>
           <input type="file" className="hidden" onChange={uploadImages} />
         </label>
-        {!images.length && <div>No photos in this product</div>}
       </div>
+
+      {!images.length && <div>No photos in this product</div>}
       <div className="flex gap-2">
         <button type="submit" className="btn-primary">
           Save
