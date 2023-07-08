@@ -1,8 +1,9 @@
-import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
-import axios from 'axios'
-import { ProductType } from "@/types/Products";
+
 import ProductForm from "@/components/ProductForm";
+import { ProductType } from "@/types";
+import axios from 'axios'
+import { useRouter } from "next/router"
 
 export default function EditProductPage() {
 

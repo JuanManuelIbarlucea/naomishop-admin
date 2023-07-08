@@ -5,3 +5,9 @@ export interface ProductType {
   description?: string | undefined;
   images: string[];
 }
+
+export interface CategoryType {
+  _id: string;
+  name: string;
+  parent?: CategoryType;
+}

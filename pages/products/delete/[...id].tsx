@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { ProductType } from "@/types/Products";
+import { ProductType } from "@/types";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -35,7 +35,7 @@ export default function DeleteProductPage() {
       </h1>
 
       <div className="flex gap-2 justify-center">
-        <button className="btn-primary" onClick={deleteProduct}>
+        <button className="btn-green" onClick={deleteProduct}>
           Yes
         </button>
         <button className="btn-red" onClick={goBack}>

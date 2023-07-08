@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
 
 import LazyImage from "./LazyImage";
-import { ProductType } from "@/types/Products";
+import { ProductType } from "@/types";
 import Spinner from "./Spinner";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -135,7 +135,7 @@ export default function ProductForm({ product }: ProductFormProps) {
 
       {!images.length && <div>No photos in this product</div>}
       <div className="flex gap-2">
-        <button type="submit" className="btn-primary">
+        <button type="submit" className="btn-green">
           Save
         </button>
         <button

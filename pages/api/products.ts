@@ -3,7 +3,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { Product } from "@/models/Product";
-import { ProductType } from "@/types/Products";
+import { ProductType } from "@/types";
 import { mongooseConnect } from "@/lib/mongoose";
 
 export default async function handler(
