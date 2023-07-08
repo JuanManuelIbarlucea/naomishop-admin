@@ -1,9 +1,10 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { CategoryType, ProductType } from "@/types";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
 
 import LazyImage from "./LazyImage";
-import { ProductType } from "@/types";
 import Spinner from "./Spinner";
+import { UploadIcon } from "./Icons";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -18,19 +19,31 @@ export default function ProductForm({ product }: ProductFormProps) {
     description: existingDescription,
     price: existingPrice,
     images: existingImages,
+    category: existingCategory,
   } = { ...product };
+
+  console.log({product})
 
   const [name, setName] = useState(existingName || "");
   const [description, setDescription] = useState(existingDescription || "");
+  const [category, setCategory] = useState(existingCategory || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
   const [returnToProducts, setReturnToProducts] = useState(false);
   const [imageIsUploading, setImageIsUploading] = useState(false);
+  const [categories, setCategories] = useState<CategoryType[]>([]);
+
   const router = useRouter();
+
+  useEffect(() => {
+    axios.get("/api/categories").then((result) => {
+      setCategories(result.data);
+    });
+  }, []);
 
   async function saveProduct(ev: FormEvent) {
     ev.preventDefault();
-    const data = { name, description, price, images };
+    const data = { name, description, category, price, images };
 
     if (productId) {
       await axios.put("/api/products", { ...data, productId });
@@ -85,6 +98,13 @@ export default function ProductForm({ product }: ProductFormProps) {
         placeholder="Description"
         onChange={(ev) => setDescription(ev.target.value)}
       />
+      <label>Category</label>
+      <select value={category} onChange={(ev) => setCategory(ev.target.value)}>
+        <option value="">No category</option>
+        {categories.map((category) => {
+          return <option value={category._id}>{category.name}</option>;
+        })}
+      </select>
       <label>Price (in USD)</label>
       <input
         value={price}
@@ -114,20 +134,7 @@ export default function ProductForm({ product }: ProductFormProps) {
         )}
 
         <label className="w-24 h-24 border flex justify-center items-center text-sm gap-1 text-center text-gray-500 bg-gray-200 rounded-lg cursor-pointer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-            />
-          </svg>
+          <UploadIcon />
           <div>Upload</div>
           <input type="file" className="hidden" onChange={uploadImages} />
         </label>

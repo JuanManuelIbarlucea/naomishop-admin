@@ -24,23 +24,18 @@ export default async function handler(
   }
 
   if (method === "POST") {
-    const { name, description, price, images } = req.body;
-    const productDoc = await Product.create({
-      name,
-      description,
-      price,
-      images,
-    });
+    const productDoc = await Product.create(req.body);
     res.json(productDoc);
   }
 
   if (method === "PUT") {
-    const { productId, name, description, price, images } = req.body;
+    const { productId, name, description, price, images, category } = req.body;
     await Product.findByIdAndUpdate(productId, {
       name,
       description,
       price,
       images,
+      category
     });
     res.json(true);
   }
