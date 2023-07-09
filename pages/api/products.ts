@@ -29,13 +29,22 @@ export default async function handler(
   }
 
   if (method === "PUT") {
-    const { productId, name, description, price, images, category } = req.body;
+    const {
+      productId,
+      name,
+      description,
+      price,
+      images,
+      category,
+      properties,
+    } = req.body;
     await Product.findByIdAndUpdate(productId, {
       name,
       description,
       price,
       images,
-      category
+      category,
+      properties,
     });
     res.json(true);
   }

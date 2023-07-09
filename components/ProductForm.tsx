@@ -1,4 +1,4 @@
-import { CategoryType, ProductType } from "@/types";
+import { CategoryType, ProductPropertyType, ProductType } from "@/types";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { ItemInterface, ReactSortable } from "react-sortablejs";
 
@@ -20,9 +20,8 @@ export default function ProductForm({ product }: ProductFormProps) {
     price: existingPrice,
     images: existingImages,
     category: existingCategory,
+    properties: existingProperties,
   } = { ...product };
-
-  console.log({product})
 
   const [name, setName] = useState(existingName || "");
   const [description, setDescription] = useState(existingDescription || "");
@@ -32,7 +31,9 @@ export default function ProductForm({ product }: ProductFormProps) {
   const [returnToProducts, setReturnToProducts] = useState(false);
   const [imageIsUploading, setImageIsUploading] = useState(false);
   const [categories, setCategories] = useState<CategoryType[]>([]);
-
+  const [productProperties, setProductProperties] = useState<any>(
+    existingProperties || {}
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -43,7 +44,14 @@ export default function ProductForm({ product }: ProductFormProps) {
 
   async function saveProduct(ev: FormEvent) {
     ev.preventDefault();
-    const data = { name, description, category, price, images };
+    const data = {
+      name,
+      description,
+      category,
+      price,
+      images,
+      properties: productProperties,
+    };
 
     if (productId) {
       await axios.put("/api/products", { ...data, productId });
@@ -75,12 +83,32 @@ export default function ProductForm({ product }: ProductFormProps) {
     setImages(iterableImages.map((iterable) => iterable.link));
   }
 
+  function setProductProperty(name: string, newValue: string) {
+    setProductProperties((prev: any) => {
+      const newProductProperties = { ...prev };
+      newProductProperties[name] = newValue;
+      return newProductProperties;
+    });
+  }
+
   const imagesIterable = images?.map((image, i) => {
     return { link: image, id: i };
   });
 
   if (returnToProducts) {
     router.push("/products");
+  }
+
+  const propertiesToFill = [];
+
+  if (categories.length > 0 && category) {
+    let catInfo = categories.find(({ _id }: CategoryType) => _id === category);
+    if (catInfo) propertiesToFill.push(...catInfo?.properties);
+    while (catInfo?.parent?._id) {
+      const parentCat = categories.find(({ _id }) => catInfo?.parent?._id);
+      if (parentCat) propertiesToFill.push(...parentCat?.properties);
+      catInfo = parentCat;
+    }
   }
 
   return (
@@ -102,9 +130,27 @@ export default function ProductForm({ product }: ProductFormProps) {
       <select value={category} onChange={(ev) => setCategory(ev.target.value)}>
         <option value="">No category</option>
         {categories.map((category) => {
-          return <option value={category._id}>{category.name}</option>;
+          return (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          );
         })}
       </select>
+      {propertiesToFill.length > 0 &&
+        propertiesToFill.map((p) => (
+          <div key={p.name} className="flex gap-1">
+            <div>{p.name}</div>
+            <select
+              value={productProperties[p.name]}
+              onChange={(ev) => setProductProperty(p.name, ev.target.value)}
+            >
+              {(p.values as string[]).map((v) => (
+                <option key={v} value={v}>{v}</option>
+              ))}
+            </select>
+          </div>
+        ))}
       <label>Price (in USD)</label>
       <input
         value={price}

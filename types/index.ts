@@ -10,6 +10,7 @@ export interface ProductType {
   description?: string | undefined;
   images: string[];
   category?: string;
+  properties: { [key: string]: string };
 }
 
 export interface CategoryType {
