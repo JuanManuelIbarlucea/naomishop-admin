@@ -26,19 +26,16 @@ export default async function handler(
   }
 
   if (method === "POST") {
-    const { name, parent } = req.body;
-    const category = await Category.create({
-      name,
-      parent,
-    });
+    const category = await Category.create(req.body);
     res.json(category);
   }
 
   if (method === "PUT") {
-    const { categoryId, name, parent } = req.body;
+    const { categoryId, name, parent, properties } = req.body;
     await Category.findByIdAndUpdate(categoryId, {
       name,
       parent,
+      properties,
     });
     res.json(true);
   }

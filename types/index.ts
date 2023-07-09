@@ -1,3 +1,7 @@
+export interface ProductPropertyType {
+  name: string;
+  values: string | string[];
+}
 
 export interface ProductType {
   _id: string;
@@ -12,4 +16,5 @@ export interface CategoryType {
   _id: string;
   name: string;
   parent?: CategoryType;
+  properties: ProductPropertyType[];
 }
