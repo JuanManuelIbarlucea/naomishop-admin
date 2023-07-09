@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { Category } from "@/models/Category";
 import { CategoryType } from "@/types";
+import { isAdminRequest } from "./auth/[...nextauth]";
 import { mongooseConnect } from "@/lib/mongoose";
 
 export default async function handler(
@@ -12,6 +13,7 @@ export default async function handler(
 ) {
   const { method } = req;
   await mongooseConnect();
+  await isAdminRequest(req, res);
 
   if (method === "GET") {
     if (req.query?.id) {

@@ -3,6 +3,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 import { Form } from "multiparty";
 import fs from "fs";
+import { isAdminRequest } from "./auth/[...nextauth]";
 import mime from "mime-types";
 
 const bucketName = "naomishop";
@@ -11,6 +12,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await isAdminRequest(req, res);
   const form = new Form();
   const { fields, files } = await new Promise<any>((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
@@ -45,7 +47,7 @@ export default async function handler(
     links.push(link);
   }
 
-  res.json({links});
+  res.json({ links });
 }
 
 export const config = {

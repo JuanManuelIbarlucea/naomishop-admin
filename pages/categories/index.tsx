@@ -214,7 +214,7 @@ export function Categories({ swal }: { swal: any }) {
                   <td>
                     <div className="flex">
                       <button
-                        className="btn-primary flex p-1"
+                        className="btn-primary flex px-2"
                         onClick={() => editCategory(category)}
                       >
                         <EditIcon />
@@ -222,7 +222,7 @@ export function Categories({ swal }: { swal: any }) {
                       </button>
                       <button
                         onClick={() => deleteCategory(category)}
-                        className="btn-red flex p-1 "
+                        className="btn-red flex px-2"
                       >
                         <DeleteIcon />
                         Delete

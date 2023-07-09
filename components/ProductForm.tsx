@@ -146,7 +146,9 @@ export default function ProductForm({ product }: ProductFormProps) {
               onChange={(ev) => setProductProperty(p.name, ev.target.value)}
             >
               {(p.values as string[]).map((v) => (
-                <option key={v} value={v}>{v}</option>
+                <option key={v} value={v}>
+                  {v}
+                </option>
               ))}
             </select>
           </div>
