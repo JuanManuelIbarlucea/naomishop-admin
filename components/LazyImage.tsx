@@ -7,7 +7,7 @@ export default function LazyImage(props: ImgHTMLAttributes<HTMLImageElement>) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="h-24 flex items-center">
+    <div className="h-full w-full flex items-center">
       <img
         {...props}
         style={{ display: !isLoaded ? "none" : "block" }}

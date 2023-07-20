@@ -1,5 +1,5 @@
 import { CategoryType, ProductPropertyType } from "@/types";
-import { DeleteIcon, EditIcon } from "@/components/Icons";
+import { TrashIcon, EditIcon } from "@/components/Icons";
 import { FormEvent, RefAttributes, useEffect, useState } from "react";
 
 import axios from "axios";
@@ -181,7 +181,7 @@ export function Categories({ swal }: { swal: any }) {
                   className="btn-red"
                   type="button"
                 >
-                  Remove
+                  <TrashIcon />
                 </button>
               </div>
             );
@@ -224,7 +224,7 @@ export function Categories({ swal }: { swal: any }) {
                         onClick={() => deleteCategory(category)}
                         className="btn-red flex px-2"
                       >
-                        <DeleteIcon />
+                        <TrashIcon />
                         Delete
                       </button>
                     </div>

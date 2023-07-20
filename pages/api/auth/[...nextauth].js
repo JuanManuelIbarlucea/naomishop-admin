@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
 
-const adminEmails = ["aylenmoller.am@gmail.com"];
+const adminEmails = ["jmibarlucea@gmail.com"];
 
 export const authOptions = {
   providers: [
@@ -31,7 +31,7 @@ export async function isAdminRequest(req, res) {
   if (!adminEmails.includes(session?.user?.email)) {
     res.status(401)
     res.end()
-    throw "Not an admin";
+    throw "Unauthorized";
   }
 }
 

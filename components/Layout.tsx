@@ -18,7 +18,7 @@ export default function Layout({ children }: LayoutProps) {
       <div className={"bg-primary w-screen h-screen flex items-center"}>
         <div className="text-center w-full">
           <button
-            className={"bg-white p-2 px-4 rounded-lg"}
+            className={"bg-white text-black p-2 px-4 rounded-lg"}
             onClick={() => signIn("google")}
           >
             Login with Google
@@ -38,9 +38,9 @@ export default function Layout({ children }: LayoutProps) {
           <Logo />
         </div>
       </div>
-      <div className="bg-primary min-h-screen flex">
+      <div className="bg-primary min-h-screen flex" onClick={() => setShowNav(false)}>
         <Nav show={showNav} />
-        <div className="bg-white flex-grow mt-2 mb-2 rounded-lg p-4 md:mr-2">
+        <div className="bg-gray-100 flex-grow mt-2 mb-2 rounded-lg p-4 md:mr-2">
           {children}
         </div>
       </div>

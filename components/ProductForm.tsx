@@ -140,17 +140,20 @@ export default function ProductForm({ product }: ProductFormProps) {
       {propertiesToFill.length > 0 &&
         propertiesToFill.map((p) => (
           <div key={p.name} className="flex gap-1">
-            <div>{p.name}</div>
-            <select
-              value={productProperties[p.name]}
-              onChange={(ev) => setProductProperty(p.name, ev.target.value)}
-            >
-              {(p.values as string[]).map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
+            <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>
+            <div>
+              <select
+                value={productProperties[p.name]}
+                onChange={(ev) => setProductProperty(p.name, ev.target.value)}
+              >
+                {(p.values as string[]).map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+
           </div>
         ))}
       <label>Price (in USD)</label>
@@ -160,15 +163,16 @@ export default function ProductForm({ product }: ProductFormProps) {
         placeholder="Price"
         onChange={(ev) => setPrice(ev.target.value)}
       />
+      <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-3">
         <ReactSortable
           setList={updateImagesOrder}
           list={imagesIterable}
-          className="flex flex-wrap gap-3"
+          className="mb-2 flex flex-wrap gap-3"
         >
           {images.map((link) => {
             return (
-              <div key={link} className="h-24">
+              <div key={link} className="h-24 bg-white p-3 shadow-sm rounded-sm border border-gray-200">
                 <LazyImage src={link} alt="" className="rounded-lg" />
               </div>
             );
@@ -181,7 +185,7 @@ export default function ProductForm({ product }: ProductFormProps) {
           </div>
         )}
 
-        <label className="w-24 h-24 border flex justify-center items-center text-sm gap-1 text-center text-gray-500 bg-gray-200 rounded-lg cursor-pointer">
+        <label className="w-24 h-24 border flex flex-col justify-center items-center text-sm gap-1 text-center text-primary border-primary  rounded-lg cursor-pointer shadow-md">
           <UploadIcon />
           <div>Upload</div>
           <input type="file" className="hidden" onChange={uploadImages} />

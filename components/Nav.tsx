@@ -24,9 +24,8 @@ export default function Nav({ show }: { show: boolean }) {
 
   return (
     <aside
-      className={`${
-        show ? "left-0" : "-left-full"
-      } top-0 p-4 pr-0 fixed w-full h-full bg-primary md:static md:w-auto transition-all`}
+      className={`${show ? "left-0" : "-left-full"
+        } top-0 p-4 pr-0 fixed w-full h-full bg-primary md:static md:w-auto transition-all`}
     >
       <div className="mb-4 mr-4">
         <Logo />

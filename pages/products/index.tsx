@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon } from "@/components/Icons";
+import { TrashIcon, EditIcon } from "@/components/Icons";
 import { useEffect, useState } from "react";
 
 import Link from "next/link";
@@ -34,7 +34,7 @@ export default function Product() {
                   Edit
                 </Link>
                 <Link href={`/products/delete/${product._id}`} className="red">
-                  <DeleteIcon />
+                  <TrashIcon />
                   Delete
                 </Link>
               </td>
