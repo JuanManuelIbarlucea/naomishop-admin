@@ -65,7 +65,8 @@ table.basic {
   @apply w-full bg-white shadow-md;
 }
 
-table.basic thead tr td {
+table.basic thead tr td,
+table.basic thead tr th {
   @apply bg-highlight uppercase text-sm px-4 py-2;
 }
 

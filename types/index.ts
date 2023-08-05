@@ -19,3 +19,27 @@ export interface CategoryType {
   parent?: CategoryType;
   properties: ProductPropertyType[];
 }
+
+export interface OrderType {
+  _id: string;
+  line_items: StripeOrder[];
+  name: string;
+  email: string;
+  city: string;
+  postalCode: string;
+  streetAddress: string;
+  country: string;
+  paid: boolean;
+  createdAt: string;
+}
+
+export interface StripeOrder {
+  quantity: number;
+  price_data: {
+    currency: string;
+    product_data: {
+      name: string;
+    };
+    unit_amount: number;
+  };
+}

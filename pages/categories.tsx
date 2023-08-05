@@ -1,15 +1,15 @@
-import { CategoryType, ProductPropertyType } from "@/types";
-import { TrashIcon, EditIcon } from "@/components/Icons";
-import { FormEvent, RefAttributes, useEffect, useState } from "react";
+import { CategoryType, ProductPropertyType } from '@/types';
+import { TrashIcon, EditIcon } from '@/components/Icons';
+import { FormEvent, RefAttributes, useEffect, useState } from 'react';
 
-import axios from "axios";
-import { withSwal } from "react-sweetalert2";
+import axios from 'axios';
+import { withSwal } from 'react-sweetalert2';
 
 export function Categories({ swal }: { swal: any }) {
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>('');
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [properties, setProperties] = useState<ProductPropertyType[]>([]);
-  const [parent, setParent] = useState<string>("");
+  const [parent, setParent] = useState<string>('');
   const [editedCategory, setEditedCategory] = useState<CategoryType | null>(
     null
   );
@@ -18,29 +18,29 @@ export function Categories({ swal }: { swal: any }) {
     ev.preventDefault();
     const data = {
       name,
-      parent: parent.trim() !== "" ? parent : null,
+      parent: parent.trim() !== '' ? parent : null,
       properties: properties.map(({ name, values }: ProductPropertyType) => ({
         name,
-        values: (values as string).split(","),
+        values: (values as string).split(','),
       })),
     };
     if (editedCategory) {
-      await axios.put("/api/categories", {
+      await axios.put('/api/categories', {
         ...data,
         categoryId: editedCategory._id,
       });
       setEditedCategory(null);
     } else {
-      await axios.post("/api/categories", data);
+      await axios.post('/api/categories', data);
     }
-    setName("");
-    setParent("");
+    setName('');
+    setParent('');
     setProperties([]);
     fetchCategories();
   }
 
   function fetchCategories() {
-    axios.get("/api/categories").then((response) => {
+    axios.get('/api/categories').then((response) => {
       setCategories(response.data);
     });
   }
@@ -48,10 +48,10 @@ export function Categories({ swal }: { swal: any }) {
   function editCategory(category: CategoryType) {
     setEditedCategory(category);
     setName(category.name);
-    setParent(category.parent?._id || "");
+    setParent(category.parent?._id || '');
     const editedProperties = category.properties.map(({ name, values }) => ({
       name,
-      values: (values as string[]).join(","),
+      values: (values as string[]).join(','),
     }));
     setProperties(editedProperties || []);
   }
@@ -59,12 +59,12 @@ export function Categories({ swal }: { swal: any }) {
   function deleteCategory(category: CategoryType) {
     swal
       .fire({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: `Do you want to delete ${category.name}?`,
         showCancelButton: true,
-        cancelButtonText: "Cancel",
-        confirmButtonText: "Yes, delete!",
-        confirmButtonColor: "#d55",
+        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Yes, delete!',
+        confirmButtonColor: '#d55',
         reverseButtons: true,
       })
       .then((result: any) => {
@@ -79,7 +79,7 @@ export function Categories({ swal }: { swal: any }) {
 
   function addProperty() {
     setProperties((prev: ProductPropertyType[]) => {
-      return [...prev, { name: "", values: "" }];
+      return [...prev, { name: '', values: '' }];
     });
   }
 
@@ -107,8 +107,8 @@ export function Categories({ swal }: { swal: any }) {
 
   function cancelEdit() {
     setEditedCategory(null);
-    setName("");
-    setParent("");
+    setName('');
+    setParent('');
     setProperties([]);
   }
 
@@ -122,7 +122,7 @@ export function Categories({ swal }: { swal: any }) {
       <label>
         {editedCategory
           ? `Edit category ${editedCategory.name}`
-          : "New category"}
+          : 'New category'}
       </label>
       <form className="w-1/2" onSubmit={saveCategory}>
         <div className="flex gap-1">
@@ -138,7 +138,7 @@ export function Categories({ swal }: { swal: any }) {
             className="mb-0"
             value={parent}
           >
-            <option value={""}>No parent category.</option>
+            <option value={''}>No parent category.</option>
             {categories.map((category) => (
               <option key={category._id} value={category._id}>
                 {category.name}
